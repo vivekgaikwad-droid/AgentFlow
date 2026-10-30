@@ -1,0 +1,6 @@
+{
+  "name": "AgentFlow",
+  "description": "AgentFlow: A Multi-Agent AI Automation Platform - From Prompts to Action",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

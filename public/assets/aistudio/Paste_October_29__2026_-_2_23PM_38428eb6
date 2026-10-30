@@ -1,0 +1,1150 @@
+# PROJECT: AGENTFLOW
+## A Multi-Agent AI Automation Platform
+
+Act as a senior full-stack software engineer, AI agent architect, cloud engineer, UI/UX designer, and technical mentor.
+
+Build a complete, dynamic, professional, full-stack web application called **AgentFlow: A Multi-Agent AI Automation Platform**.
+
+This is a university final-year project. The application must be functional, demonstrable, maintainable, and suitable for publishing as a public GitHub repository.
+
+Do not create just a landing page, static dashboard, or UI prototype. Build a working application with real navigation, functional forms, persistent data, backend integration, AI-powered task planning, tool execution, approval workflows, and execution logs.
+
+Use the requirements below as the project's source of truth.
+
+---
+
+# 1. PROJECT OBJECTIVE
+
+AgentFlow is an AI-powered workflow automation platform that converts a user's natural-language goal into an executable sequence of steps.
+
+The system should follow this cycle:
+
+UNDERSTAND → PLAN → ACT → OBSERVE → APPROVE WHEN REQUIRED → CONTINUE → COMPLETE
+
+Example user goal:
+
+"Monitor the careers pages of selected companies, identify newly published cloud engineering and DevOps internships, save new listings, and prepare an email notification."
+
+AgentFlow should:
+
+1. Understand the user's goal.
+2. Ask clarifying questions if essential information is missing.
+3. Generate a structured execution plan using Google Gemini.
+4. Identify the tools required for each step.
+5. Execute supported tools through the backend.
+6. Pass outputs between dependent steps.
+7. Observe and validate tool results.
+8. Retry eligible transient failures within defined limits.
+9. Request human approval before sensitive or external actions.
+10. Save the results and execution history.
+11. Display the final result to the user.
+
+The platform must be general-purpose in its architecture, while the automated job-posting tracker serves as its primary demonstration use case.
+
+---
+
+# 2. TECHNOLOGY STACK
+
+Use the following architecture.
+
+FRONTEND:
+- React
+- TypeScript
+- Vite, if compatible with the selected Google AI Studio environment
+- Tailwind CSS
+- A reusable component system
+- Lucide icons or a comparable icon library
+- Responsive layouts for desktop, tablet, and mobile
+
+BACKEND:
+- Python
+- FastAPI
+- Pydantic models
+- REST API endpoints
+- Structured JSON responses
+- Backend validation and exception handling
+
+AI:
+- Google Gemini API
+- Structured output for task plans
+- Gemini function calling or tool calling
+- An explicit plan–act–observe execution loop
+- Context-aware orchestration using previous step results
+
+DATABASE:
+- Firebase Firestore
+- Persistent storage for users, workflows, tracked companies, job postings, approval requests, and execution history
+
+AUTHENTICATION:
+- Firebase Authentication
+- Email and password authentication
+- Login, registration, logout, and protected dashboard routes
+
+AUTOMATION:
+- GitHub Actions scheduled workflows for an initial scheduling implementation
+- A backend endpoint or worker that performs scheduled checks
+- AWS Lambda as an optional deployment extension
+- AWS Step Functions and Amazon SQS as future scale-up components
+
+VERSION CONTROL:
+- Git
+- GitHub
+- A professional README.md
+- .gitignore
+- .env.example
+- Clear installation and deployment instructions
+
+IMPORTANT ARCHITECTURAL RULES:
+
+1. Keep the frontend, backend, and configuration files logically separated.
+2. All Gemini API calls involving secrets must be performed on the backend.
+3. Never expose secret API keys in frontend source code.
+4. Never commit .env files, credentials, service-account keys, or private configuration files.
+5. Keep Firebase access rules restrictive and validate user ownership on the backend.
+6. Use modular code instead of putting the entire application in one component.
+7. Use environment variables for all deployment-specific configuration.
+8. Pin or document important dependencies and provide reproducible setup instructions.
+9. Do not silently replace a failed integration with fabricated data.
+10. Clearly label demo mode, simulated results, and unavailable integrations.
+
+If the selected Google AI Studio environment cannot generate or execute the Python backend directly, create the React frontend and all required backend source files, then explain exactly how to run the backend locally.
+
+---
+
+# 3. VISUAL DESIGN AND BRAND IDENTITY
+
+Create a premium, modern SaaS dashboard.
+
+The product should look like a serious AI automation platform rather than a generic chatbot or student project template.
+
+DESIGN DIRECTION:
+
+- Product name: AgentFlow
+- Tagline: From Prompts to Action
+- Theme: Dark-first interface
+- Background: Deep navy and charcoal
+- Accent colors: Electric blue, violet, and restrained cyan
+- Typography: Clean, modern, highly readable
+- Cards: Subtle borders, consistent spacing, and restrained shadows
+- Animations: Smooth, purposeful transitions
+- Icons: Consistent line icons
+- Layout: Spacious, information-dense where appropriate, but not cluttered
+
+Create an elegant AgentFlow logo using a workflow or connected-node visual motif.
+
+Avoid excessive gradients, oversized headings, unnecessary animations, and decorative elements that reduce usability.
+
+Include:
+- Light/dark theme support if practical
+- Loading skeletons
+- Empty states
+- Error states
+- Success notifications
+- Confirmation dialogs
+- Tooltips for complex controls
+- Responsive sidebar behavior
+- Accessible form controls
+- Keyboard navigation
+
+The application must remain readable and usable on different screen sizes.
+
+---
+
+# 4. APPLICATION PAGES
+
+Build the following pages and connect them through real navigation.
+
+## PAGE A: LANDING PAGE
+
+Create a polished landing page explaining AgentFlow.
+
+Include:
+- Product logo and navigation
+- Hero heading: "From Prompts to Action."
+- Supporting text explaining AI-powered workflow automation
+- Primary CTA: "Launch AgentFlow"
+- Secondary CTA: "Explore How It Works"
+- How it works section
+- Feature cards
+- Job-tracker use case
+- Architecture overview
+- Security and human-approval section
+- Footer with project and GitHub links
+
+The landing page must accurately describe implemented functionality. Do not claim that unavailable integrations are already operational.
+
+## PAGE B: AUTHENTICATION
+
+Implement:
+- Registration
+- Login
+- Logout
+- Form validation
+- Loading states
+- Error messages
+- Protected application routes
+
+Use Firebase Authentication.
+
+When Firebase configuration is missing, display a clear setup message or provide a deliberately enabled development mode. Do not pretend that real authentication succeeded.
+
+## PAGE C: MAIN DASHBOARD
+
+Create an informative dashboard with real data from Firestore.
+
+Display:
+- Total workflows
+- Successful runs
+- Failed runs
+- Pending approvals
+- Tracked companies
+- New job postings discovered
+- Recent execution activity
+- Workflow status distribution
+- Recent errors
+- Upcoming scheduled checks, where scheduling is configured
+
+Use charts only when meaningful data is available.
+
+The dashboard should update after workflow executions and relevant database changes.
+
+Provide useful empty states for new users.
+
+## PAGE D: AI WORKFLOW BUILDER
+
+This is the core interface of AgentFlow.
+
+Create a large natural-language input field with the heading:
+
+"What would you like AgentFlow to accomplish?"
+
+Example prompts:
+- Monitor selected company careers pages for new DevOps jobs.
+- Find new cloud engineering internship listings and save them.
+- Check a set of public webpages and report changes.
+- Compare newly discovered job postings with previously tracked results.
+
+Allow the user to specify:
+- Workflow name
+- Goal description
+- Relevant companies or websites
+- Keywords
+- Location preferences
+- Experience level
+- Execution frequency, when scheduling is enabled
+- Notification preferences
+
+Provide a "Generate Plan" button.
+
+When clicked:
+1. Validate the goal.
+2. Send the goal to the FastAPI backend.
+3. Use Gemini to create a structured plan.
+4. Render the generated plan as an editable sequence of steps.
+5. Show the tools assigned to each step.
+6. Show step dependencies and approval requirements.
+7. Allow the user to edit, remove, or reorder eligible steps.
+8. Save the workflow only after the user confirms it.
+
+Do not hardcode the AI's plan.
+
+Use a validated structured representation such as:
+
+{
+  "workflow_name": "Cloud Job Tracker",
+  "goal": "Find new cloud engineering jobs",
+  "steps": [
+    {
+      "id": "step_1",
+      "name": "Check configured careers pages",
+      "tool": "web_check",
+      "description": "Retrieve accessible public job listings",
+      "requires_approval": false,
+      "depends_on": []
+    },
+    {
+      "id": "step_2",
+      "name": "Compare job listings",
+      "tool": "compare_jobs",
+      "description": "Compare normalized listings against stored records",
+      "requires_approval": false,
+      "depends_on": ["step_1"]
+    },
+    {
+      "id": "step_3",
+      "name": "Save new discoveries",
+      "tool": "save_jobs",
+      "description": "Persist validated new listings",
+      "requires_approval": false,
+      "depends_on": ["step_2"]
+    },
+    {
+      "id": "step_4",
+      "name": "Prepare notification",
+      "tool": "prepare_notification",
+      "description": "Prepare a summary of newly discovered jobs",
+      "requires_approval": true,
+      "depends_on": ["step_3"]
+    }
+  ]
+}
+
+Treat this as a schema example, not a fixed workflow. Validate AI-generated plans against a backend-defined tool registry.
+
+The AI must never be allowed to invent arbitrary executable tools or execute arbitrary generated code.
+
+## PAGE E: WORKFLOW EXECUTION VIEW
+
+Create a dedicated execution page showing the live status of a workflow.
+
+Display a visual pipeline:
+
+GOAL → PLAN → TOOL EXECUTION → OBSERVATION → APPROVAL IF REQUIRED → RESULT
+
+Each step should show:
+- Step name
+- Tool used
+- Execution status
+- Start and completion time
+- Input summary
+- Output summary
+- Retry count
+- Error details, if applicable
+- Approval status, if applicable
+
+Use the following statuses:
+- Pending
+- Running
+- Completed
+- Failed
+- Waiting for approval
+- Skipped
+
+Show step transitions as they occur.
+
+Use polling or another practical mechanism to retrieve backend execution updates.
+
+Do not display fake real-time progress unrelated to actual execution.
+
+Include:
+- Start workflow
+- Pause or cancel when supported
+- Retry eligible failed steps
+- View complete logs
+- View final result
+
+Ensure that cancellation and retries cannot accidentally duplicate database writes or external actions.
+
+## PAGE F: JOB-POSTING TRACKER
+
+This is the primary end-to-end demonstration of the project.
+
+Create a complete interface for monitoring selected companies' careers pages.
+
+Features:
+- Add a company
+- Edit tracked company details
+- Remove a company
+- Configure an accessible public careers-page URL
+- Configure job keywords
+- Configure location preferences
+- Configure experience level
+- Enable or disable monitoring
+- Manually trigger a check
+- View discovered jobs
+- Search and filter job listings
+- Mark jobs as saved
+- Mark jobs as applied to
+- Open the original job-posting page
+
+Each job record should support:
+- Job title
+- Company
+- Location
+- Employment type, if available
+- Experience level, if available
+- Original posting URL
+- Date discovered
+- Source
+- First-seen timestamp
+- Last-checked timestamp
+- Application status
+- Optional description
+
+Implement duplicate detection using a normalized source URL and a suitable secondary fingerprint.
+
+A previously discovered job must not be inserted repeatedly on every check.
+
+The application must distinguish:
+- Newly discovered postings
+- Previously known postings
+- Updated postings, when changes can be verified
+- Failed source checks
+
+WEB CHECKING RULES:
+
+Use a modular web-checking adapter.
+
+Support accessible public pages and clearly document the limitations of each supported source.
+
+Prefer official careers APIs or structured public feeds when available. For supported websites, use appropriate HTML parsing when permitted.
+
+Respect website terms, robots restrictions where applicable, rate limits, and access controls.
+
+Do not bypass authentication, CAPTCHAs, paywalls, anti-bot mechanisms, or other access restrictions.
+
+If a source cannot be checked reliably, show the failure and its reason.
+
+Never fabricate job postings and present them as real discoveries.
+
+If real sources are unavailable during development, provide an explicitly labeled demonstration dataset that is separate from verified results.
+
+## PAGE G: APPROVAL CENTER
+
+Build a dedicated human-approval interface.
+
+List actions awaiting approval.
+
+Each approval request should show:
+- Workflow name
+- Requested action
+- Reason approval is required
+- Proposed action details
+- Relevant previous step outputs
+- Created timestamp
+- Expiration, if configured
+- Current status
+
+Provide:
+- Approve
+- Reject
+- View details
+
+Require an optional rejection reason.
+
+Examples of actions requiring approval:
+- Sending an email
+- Publishing external content
+- Performing an irreversible action
+- Accessing a sensitive integration
+- Taking an action outside the configured workflow permissions
+
+An approval is a backend-enforced checkpoint, not merely a button in the frontend.
+
+When a step requires approval:
+1. Persist the approval request.
+2. Set the workflow to waiting for approval.
+3. Stop execution of the protected action.
+4. Allow the authorized user to approve or reject it.
+5. Validate the approval on the backend.
+6. Resume the workflow only when appropriate.
+7. Record the decision in the audit log.
+
+Rejecting an action must prevent that action from executing.
+
+Protect against repeated approvals, duplicate submissions, unauthorized approvals, and approval of expired requests.
+
+## PAGE H: EXECUTION HISTORY AND LOGS
+
+Build a searchable execution-history page.
+
+Display:
+- Workflow name
+- Run ID
+- Start time
+- Duration
+- Final status
+- Number of completed steps
+- Number of failed steps
+- Pending approvals
+- Final output summary
+
+Allow users to:
+- Search execution history
+- Filter by workflow
+- Filter by status
+- View detailed step logs
+- Inspect errors
+- Review tool inputs and outputs, with secrets and sensitive information redacted
+
+Store execution records in Firestore.
+
+Use consistent timestamps and a documented representation for dates.
+
+## PAGE I: WORKFLOW MANAGEMENT
+
+Provide a page for:
+- Listing workflows
+- Creating workflows
+- Editing workflow configurations
+- Enabling or disabling workflows
+- Manually running workflows
+- Viewing workflow history
+- Deleting workflows with confirmation
+
+Show each workflow's current state and next scheduled execution when available.
+
+## PAGE J: SETTINGS
+
+Include:
+- User profile
+- Account settings
+- Theme preferences
+- Notification preferences
+- Configured integrations
+- Scheduling status
+- Backend connection status
+- Firebase connection/setup guidance
+- Gemini configuration status
+
+Never display actual secret API keys.
+
+Do not claim that an integration is connected unless its configuration or connection has actually been verified.
+
+---
+
+# 5. GEMINI AI ORCHESTRATION ENGINE
+
+Implement the orchestration engine in Python using FastAPI and the Google Gemini API.
+
+The orchestrator must follow an explicit plan–act–observe loop.
+
+STEP 1: UNDERSTAND
+- Receive a natural-language goal.
+- Identify the intended outcome.
+- Determine required inputs.
+- Ask for clarification when necessary.
+
+STEP 2: PLAN
+- Generate a structured sequence of steps.
+- Assign supported tools.
+- Define dependencies.
+- Identify approval requirements.
+- Validate the plan against a backend-defined schema.
+
+STEP 3: ACT
+- Execute one eligible step at a time.
+- Call only registered backend tools.
+- Pass the output of completed steps to dependent steps.
+- Enforce tool-specific input validation and permissions.
+
+STEP 4: OBSERVE
+- Inspect tool results.
+- Validate expected outputs.
+- Record errors.
+- Determine whether a step succeeded.
+- Decide whether a permitted retry is appropriate.
+
+STEP 5: RECOVER
+- Retry eligible transient errors with bounded retries.
+- Avoid retrying permanent failures indefinitely.
+- Use timeouts and execution limits.
+- Prevent duplicate side effects.
+- Stop the workflow when recovery is not possible.
+
+STEP 6: APPROVE
+- Pause before executing protected actions.
+- Persist the approval request.
+- Resume only after a valid approval.
+- Stop the protected action when rejected.
+
+STEP 7: COMPLETE
+- Store the final result.
+- Update the workflow and run status.
+- Display a summary of completed actions.
+- Provide links to relevant results and execution logs.
+
+IMPORTANT:
+
+Gemini is the reasoning and planning engine, not the authority that grants permissions.
+
+The backend must independently enforce:
+- Tool allowlists
+- Input schemas
+- User authorization
+- Approval requirements
+- Timeouts
+- Retry limits
+- Execution limits
+- Data-access restrictions
+
+Start with a reliable single-orchestrator architecture using Gemini function calling and modular tool adapters.
+
+Structure the code so specialized agents can be introduced later, such as:
+- Planning agent
+- Research agent
+- Data-processing agent
+- Notification agent
+
+Do not pretend that multiple independent agents exist if the implementation uses only one orchestrator.
+
+The architecture should support a future multi-agent extension without requiring a complete rewrite.
+
+---
+
+# 6. BACKEND TOOL REGISTRY
+
+Implement a controlled registry of tools.
+
+At minimum, provide these tools:
+
+1. web_check
+   Retrieves information from supported, accessible public webpages.
+
+2. compare_jobs
+   Compares normalized job records with existing stored records.
+
+3. save_jobs
+   Saves validated job records to Firestore.
+
+4. get_workflow_status
+   Retrieves the current status of an authorized workflow.
+
+5. get_run_history
+   Retrieves execution history for the authenticated user.
+
+6. prepare_notification
+   Prepares an email notification for review.
+
+7. send_notification
+   Sends an email only when the required integration is configured and the action is explicitly authorized.
+
+8. request_approval
+   Creates an approval request for a protected action.
+
+9. record_observation
+   Records a step's output and validation result.
+
+10. complete_workflow
+    Finalizes a run after required steps have completed.
+
+For every tool, implement:
+- A typed input schema
+- A typed output schema
+- Validation
+- Authorization checks
+- Error handling
+- Timeout handling where applicable
+- Structured execution logs
+
+The AI may select among permitted tools but must never receive unrestricted access to the filesystem, shell, database administration, arbitrary network requests, or generated code execution.
+
+---
+
+# 7. FIREBASE AND DATA MODEL
+
+Use Firebase Authentication and Firestore.
+
+Design a clean data model with collections or an equivalent documented structure for:
+
+users
+- uid
+- displayName
+- email
+- createdAt
+
+workflows
+- workflowId
+- ownerUid
+- name
+- goal
+- plan
+- status
+- enabled
+- createdAt
+- updatedAt
+- scheduleConfiguration
+
+workflow_runs
+- runId
+- workflowId
+- ownerUid
+- status
+- startedAt
+- completedAt
+- finalResult
+- errorSummary
+
+step_runs
+- stepRunId
+- runId
+- stepId
+- toolName
+- status
+- inputSummary
+- outputSummary
+- startedAt
+- completedAt
+- retryCount
+- errorDetails
+
+tracked_companies
+- companyId
+- ownerUid
+- name
+- careersUrl
+- keywords
+- locations
+- enabled
+- lastCheckedAt
+
+job_postings
+- jobId
+- ownerUid
+- companyId
+- title
+- location
+- sourceUrl
+- description
+- firstSeenAt
+- lastSeenAt
+- applicationStatus
+- sourceVerificationStatus
+
+approval_requests
+- approvalId
+- ownerUid
+- runId
+- stepId
+- action
+- details
+- status
+- requestedAt
+- decidedAt
+- decidedBy
+- rejectionReason
+
+notifications
+- notificationId
+- ownerUid
+- runId
+- recipient
+- subject
+- body
+- status
+- createdAt
+- sentAt
+
+audit_logs
+- auditId
+- ownerUid
+- runId
+- action
+- actor
+- timestamp
+- outcome
+
+Adjust the schema where necessary to fit Firestore's document model and querying limitations.
+
+Add appropriate indexes and security rules.
+
+Every read and write must enforce the authenticated user's access rights.
+
+Do not store plaintext passwords.
+
+Do not place privileged Firebase Admin credentials in the frontend.
+
+The backend must validate ownership before returning, modifying, or deleting user-specific data.
+
+---
+
+# 8. API DESIGN
+
+Create a documented FastAPI backend with endpoints such as:
+
+GET /health
+
+POST /api/workflows/plan
+
+POST /api/workflows
+
+GET /api/workflows
+
+GET /api/workflows/{workflow_id}
+
+PATCH /api/workflows/{workflow_id}
+
+DELETE /api/workflows/{workflow_id}
+
+POST /api/workflows/{workflow_id}/run
+
+GET /api/runs/{run_id}
+
+GET /api/runs/{run_id}/logs
+
+POST /api/runs/{run_id}/cancel
+
+POST /api/approvals/{approval_id}/approve
+
+POST /api/approvals/{approval_id}/reject
+
+GET /api/approvals/pending
+
+GET /api/companies
+
+POST /api/companies
+
+PATCH /api/companies/{company_id}
+
+DELETE /api/companies/{company_id}
+
+POST /api/companies/{company_id}/check
+
+GET /api/jobs
+
+PATCH /api/jobs/{job_id}
+
+Use:
+- Pydantic request and response models
+- Consistent error responses
+- Correct HTTP status codes
+- Request validation
+- Authentication middleware or dependencies
+- Authorization checks
+- Pagination for list endpoints
+- Filtering and search where appropriate
+- OpenAPI documentation
+
+Treat these endpoints as an initial API specification. Refine them when required by the implementation.
+
+Do not leave the frontend calling nonexistent endpoints.
+
+Do not create a production endpoint that exposes secrets or bypasses authentication.
+
+---
+
+# 9. SCHEDULING AND AUTOMATION
+
+Implement scheduling as a separate capability.
+
+For the initial version:
+- Support manual workflow execution.
+- Define a configurable schedule for eligible workflows.
+- Provide a GitHub Actions scheduled workflow or a documented alternative.
+- Ensure scheduled jobs call an authenticated backend endpoint.
+- Make repeated scheduled runs safe and idempotent.
+- Record each scheduled run in the database.
+
+Do not rely on a temporary in-memory scheduler for production deployments.
+
+If the backend is unavailable during a scheduled run, record or surface the failure when possible.
+
+Explain how AWS Lambda can be introduced for scheduled execution and how AWS Step Functions and Amazon SQS could support more complex orchestration later.
+
+Do not claim that scheduled execution is operational until the relevant infrastructure has been configured and tested.
+
+---
+
+# 10. NOTIFICATION SYSTEM
+
+Implement notification preparation first.
+
+The system should:
+- Generate a summary of newly discovered jobs.
+- Show the recipient, subject, and message body.
+- Allow the user to review the notification.
+- Require approval before sending.
+- Send only through a configured email provider.
+- Record delivery attempts and results.
+- Handle failures without falsely marking messages as sent.
+
+If no email provider is configured, allow the user to inspect the prepared notification without sending it.
+
+Do not simulate successful email delivery.
+
+---
+
+# 11. ERROR HANDLING AND SECURITY
+
+Implement practical safeguards.
+
+SECURITY:
+- Protect secret keys with environment variables.
+- Never expose Gemini API keys in frontend bundles.
+- Authenticate private API requests.
+- Verify authorization for every user-owned resource.
+- Restrict CORS to configured frontend origins.
+- Validate and sanitize inputs.
+- Protect against server-side request forgery when checking user-configured URLs.
+- Restrict requests to permitted HTTP and HTTPS destinations.
+- Apply request timeouts and response-size limits.
+- Avoid unsafe URL redirects and access to internal network resources.
+- Apply rate limits to expensive operations where practical.
+- Redact secrets from logs.
+- Avoid storing unnecessary sensitive information.
+
+RELIABILITY:
+- Handle unavailable APIs and database failures.
+- Handle invalid Gemini responses.
+- Validate AI-generated plans before execution.
+- Add bounded retries for eligible transient errors.
+- Record execution failures.
+- Make database operations idempotent where appropriate.
+- Provide actionable error messages.
+- Never mark a failed operation as successful.
+
+Add unit tests for critical validation and execution logic.
+
+---
+
+# 12. PROJECT FILE STRUCTURE
+
+Organize the project clearly.
+
+Suggested structure:
+
+agentflow/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── layouts/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── types/
+│   │   ├── utils/
+│   │   └── App.tsx
+│   ├── public/
+│   ├── package.json
+│   └── .env.example
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── models/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── agents/
+│   │   ├── tools/
+│   │   ├── workflows/
+│   │   ├── database/
+│   │   └── main.py
+│   ├── tests/
+│   ├── requirements.txt
+│   └── .env.example
+│
+├── firebase/
+│   ├── firestore.rules
+│   └── firestore.indexes.json
+│
+├── .github/
+│   └── workflows/
+│
+├── docs/
+│   ├── architecture.md
+│   ├── api.md
+│   └── deployment.md
+│
+├── .gitignore
+├── README.md
+└── LICENSE
+
+You may adjust the structure if the chosen development environment requires it, but preserve a clear separation between frontend, backend, infrastructure, tests, and documentation.
+
+Do not generate empty placeholder modules merely to make the folder structure appear complete.
+
+---
+
+# 13. GITHUB AND DEPLOYMENT READINESS
+
+Prepare the project for GitHub.
+
+Create a professional README.md containing:
+- Project title
+- Overview
+- Problem statement
+- Proposed solution
+- Core features
+- Architecture diagram using Mermaid
+- Technology stack
+- Repository structure
+- Prerequisites
+- Local installation instructions
+- Environment-variable configuration
+- Firebase setup
+- Gemini API setup
+- Frontend startup instructions
+- Backend startup instructions
+- API documentation instructions
+- Testing instructions
+- Deployment options
+- Security notes
+- Current limitations
+- Future enhancements
+- Contributors
+
+Include a suitable .gitignore covering:
+- .env files
+- Virtual environments
+- Python caches
+- Node modules
+- Build output
+- IDE settings where appropriate
+- Service-account JSON files
+- Logs and temporary files
+
+Create .env.example files containing variable names and placeholder values only.
+
+Never include real API keys, credentials, tokens, or service-account files.
+
+Document separate deployment options for the frontend and backend.
+
+The frontend may be deployed to a compatible static hosting service, while the FastAPI backend must run on a Python-compatible hosting environment.
+
+Ensure that frontend API URLs can be configured for local development and deployment.
+
+---
+
+# 14. IMPLEMENTATION MILESTONES
+
+Build the project incrementally in the following order.
+
+PHASE 1 — WORKING FOUNDATION
+- Project structure
+- Frontend shell
+- Navigation
+- Landing page
+- Dashboard layout
+- Backend health endpoint
+- Environment configuration
+
+PHASE 2 — AUTHENTICATION AND DATABASE
+- Firebase setup
+- Registration and login
+- Protected routes
+- Firestore integration
+- User-specific data access
+
+PHASE 3 — AI WORKFLOW BUILDER
+- Natural-language input
+- Gemini integration
+- Structured plan generation
+- Plan validation
+- Workflow persistence
+
+PHASE 4 — EXECUTION ENGINE
+- Tool registry
+- Plan–act–observe loop
+- Step dependencies
+- Execution logs
+- Error handling
+- Workflow status updates
+
+PHASE 5 — JOB TRACKER
+- Company management
+- Public careers-page checking
+- Job normalization
+- Duplicate detection
+- Persistent job records
+- Search and filtering
+
+PHASE 6 — APPROVAL AND NOTIFICATIONS
+- Approval center
+- Backend-enforced approval
+- Notification preparation
+- Configured email delivery
+- Audit logs
+
+PHASE 7 — SCHEDULING
+- Scheduled execution configuration
+- GitHub Actions integration
+- Authenticated scheduling requests
+- Duplicate-run prevention
+
+PHASE 8 — TESTING AND DOCUMENTATION
+- Backend tests
+- Frontend validation
+- Integration checks
+- README
+- Architecture documentation
+- Deployment instructions
+- GitHub readiness review
+
+---
+
+# 15. ACCEPTANCE CRITERIA
+
+The project is not complete merely because the frontend looks correct.
+
+The implementation should satisfy these criteria:
+
+1. The frontend starts successfully.
+2. The backend starts successfully.
+3. The frontend can communicate with the backend.
+4. Health checks work.
+5. Gemini can generate a structured workflow plan when configured.
+6. Invalid plans are rejected before execution.
+7. Supported tools execute through the backend.
+8. Workflow step outputs are passed to dependent steps.
+9. Workflow runs and logs are persisted.
+10. Users can manage tracked companies.
+11. Supported public careers pages can be checked.
+12. New job listings are saved without creating duplicates.
+13. Failed source checks are reported accurately.
+14. Approval-required actions pause before execution.
+15. Rejected actions do not execute.
+16. Configured notifications work without exposing credentials.
+17. User data is protected by authentication and authorization.
+18. Missing integrations produce clear setup instructions.
+19. Tests cover critical logic.
+20. The project can be committed to GitHub without secrets.
+
+If an external integration cannot be completed in the current environment, implement its interface and configuration requirements, document the missing setup, and clearly distinguish implemented functionality from unfinished functionality.
+
+---
+
+# 16. HOW YOU SHOULD WORK
+
+Follow these development rules throughout the project.
+
+- First, inspect the current project state and identify the supported development environment.
+- If this is a new project, initialize the application using the architecture above.
+- Create a short implementation plan before making substantial changes.
+- Build in small, verifiable milestones.
+- Preserve working code when adding features.
+- Use reusable components and maintainable naming conventions.
+- Keep frontend and backend responsibilities separate.
+- Do not invent successful API responses.
+- Do not leave core buttons disconnected.
+- Do not replace actual backend functionality with hardcoded sample results.
+- If sample data is necessary, label it clearly as demonstration data.
+- If a required API key or external service is missing, explain exactly how to configure it.
+- Run the available checks and tests after implementing each major milestone.
+- Fix discovered errors before moving on whenever possible.
+- Keep the application runnable throughout development.
+- Do not claim that an integration or test works unless it has actually been verified.
+
+## FIRST TASK
+
+Start with Phase 1.
+
+Create the initial working AgentFlow application with:
+- A polished landing page
+- A responsive application layout
+- A sidebar dashboard
+- Workflow Builder
+- Execution History
+- Job Tracker
+- Approval Center
+- Settings
+- A working FastAPI backend structure
+- A backend health-check endpoint
+- Environment-variable examples
+- A professional initial README
+- A clear path to GitHub
+
+Use realistic sample data only for clearly labeled demonstration states.
+
+After implementing Phase 1, explain:
+1. Which files were created.
+2. Which features are already functional.
+3. How to run the frontend.
+4. How to run the backend.
+5. What configuration is still required.
+6. Which tests or checks were completed.
+7. What to implement next.
+
+Then continue with subsequent phases without unnecessarily rewriting working code.
+
+**Final objective:** Deliver AgentFlow as a working, extensible AI workflow automation platform that demonstrates Gemini-based planning, controlled tool execution, persistent data, human approval, observable execution history, and a real job-posting tracker.

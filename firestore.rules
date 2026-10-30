@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny all direct client reads and writes.
+    // In AgentFlow's zero-trust architecture, all database mutations and queries
+    // are mediated through the authenticated backend (FastAPI / Server Gateway)
+    // using the Firebase Admin SDK with server-enforced RBAC and SSRF validation.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

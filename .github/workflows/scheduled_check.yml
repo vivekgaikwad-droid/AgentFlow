@@ -1,0 +1,28 @@
+name: Scheduled Careers Monitor Run
+
+on:
+  schedule:
+    # Run twice daily at 08:00 UTC and 16:00 UTC (Mon-Fri)
+    - cron: '0 8,16 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  run-agentflow-check:
+    name: Execute Scheduled Workflow Run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger AgentFlow Backend Run
+        env:
+          AGENTFLOW_API_URL: ${{ secrets.AGENTFLOW_API_URL }}
+          AGENTFLOW_API_KEY: ${{ secrets.AGENTFLOW_API_KEY }}
+          WORKFLOW_ID: "wf_cloud_internships"
+        run: |
+          echo "Dispatching scheduled execution for $WORKFLOW_ID..."
+          if [ -z "$AGENTFLOW_API_URL" ]; then
+            echo "AGENTFLOW_API_URL not configured. Running dry-run simulation."
+            exit 0
+          fi
+          curl -X POST "$AGENTFLOW_API_URL/api/workflows/$WORKFLOW_ID/run" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $AGENTFLOW_API_KEY" \
+            --fail --silent --show-error
